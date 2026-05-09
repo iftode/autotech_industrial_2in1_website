@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Coș | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Coș de cumpărături</span>
+        <h1>Produsele selectate</h1>
+        <p>
+            Această pagină susține monetizarea de tip <strong>one-time payment</strong>,
+            prin adăugarea produselor în coș și finalizarea comenzii.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container cart-grid">
+        <div>
+            {% if items %}
+            {% for item in items %}
+            <article class="card cart-item">
+                <img src="{{ url_for('static', filename='images/' ~ item.image) }}" alt="{{ item.name }}">
+
+                <div>
+                    <h3>{{ item.name }}</h3>
+                    <p><strong>Preț unitar:</strong> {{ '%.2f'|format(item.price) }} lei</p>
+                    <p><strong>Stoc disponibil:</strong> {{ item.stock }}</p>
+
+                    <div class="qty-actions">
+                        <form method="post" action="{{ url_for('update_cart_qty', product_id=item.id) }}">
+                            <input type="hidden" name="action" value="dec">
+                            <button type="submit" class="qty-btn">−</button>
+                        </form>
+
+                        <span><strong>Cantitate:</strong> {{ item.qty }}</span>
+
+                        <form method="post" action="{{ url_for('update_cart_qty', product_id=item.id) }}">
+                            <input type="hidden" name="action" value="inc">
+                            <button type="submit" class="qty-btn">+</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="summary-total">{{ '%.2f'|format(item.line_total) }} lei</p>
+                    <form method="post" action="{{ url_for('remove_from_cart', product_id=item.id) }}">
+                        <button type="submit" class="btn btn-danger small">Elimină</button>
+                    </form>
+                </div>
+            </article>
+            {% endfor %}
+            {% else %}
+            <div class="card empty-card">
+                <h3>Coșul este gol</h3>
+                <p>Adaugă produse din catalog pentru a continua comanda.</p>
+                <a href="{{ url_for('products') }}" class="btn btn-primary">Vezi produsele</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <aside class="card summary-card">
+            <h2>Rezumat comandă</h2>
+
+            {% if items %}
+            <ul class="checkout-list">
+                {% for item in items %}
+                <li>
+                    <span>{{ item.name }} x {{ item.qty }}</span>
+                    <strong>{{ '%.2f'|format(item.line_total) }} lei</strong>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <p class="summary-total">Total: {{ '%.2f'|format(total) }} lei</p>
+
+            <div class="product-actions">
+                <a href="{{ url_for('checkout') }}" class="btn btn-primary full">Continuă către checkout</a>
+                <a href="{{ url_for('products') }}" class="btn btn-light full">Mai adaugă produse</a>
+            </div>
+            {% else %}
+            <p>Nu există produse în coș.</p>
+            {% endif %}
+        </aside>
+    </div>
+</section>
+{% endblock %}

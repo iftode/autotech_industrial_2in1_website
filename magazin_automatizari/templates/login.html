@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Login utilizator | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container narrow">
+        <span class="eyebrow">Autentificare client</span>
+        <h1>Intră în contul tău</h1>
+        <p>Autentifică-te pentru a vedea comenzile și datele contului.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container narrow">
+        <div class="card form-card">
+            <h2>Login</h2>
+
+            <form method="post" class="main-form">
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Introdu adresa de email">
+                </div>
+
+                <div>
+                    <label for="password">Parolă</label>
+                    <input type="password" id="password" name="password" required placeholder="Introdu parola">
+                </div>
+
+                <button type="submit" class="btn btn-primary full">Autentificare</button>
+            </form>
+
+            <div class="contact-box">
+                <p>Nu ai cont? <a href="{{ url_for('register') }}" class="text-link">Creează unul aici</a>.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

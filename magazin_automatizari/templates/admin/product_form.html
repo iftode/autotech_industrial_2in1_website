@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Adaugă' if mode == 'new' else 'Editează' }} produs | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Administrare produse</span>
+        <h1>{{ 'Adaugă produs nou' if mode == 'new' else 'Editează produs' }}</h1>
+        <p>
+            Completează formularul pentru a {{ 'adăuga' if mode == 'new' else 'modifica' }} un produs
+            din catalogul magazinului online.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container narrow wide-form">
+        <div class="card form-card">
+
+            <form method="post" enctype="multipart/form-data" class="main-form">
+
+                <!-- CATEGORIE -->
+                <div>
+                    <label>Categorie</label>
+                    <select name="category_id" required>
+                        <option value="">Selectează categoria</option>
+                        {% for c in categories %}
+                        <option value="{{ c.id }}"
+                                {% if product and product.category_id == c.id %}selected{% endif %}>
+                            {{ c.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- NUME -->
+                <div>
+                    <label>Nume produs</label>
+                    <input type="text" name="name"
+                           placeholder="Ex: PLC Siemens S7-1200"
+                           value="{{ product.name if product else '' }}"
+                           required>
+                </div>
+
+                <!-- SKU -->
+                <div>
+                    <label>Cod SKU</label>
+                    <input type="text" name="sku"
+                           placeholder="Cod unic produs"
+                           value="{{ product.sku if product else '' }}">
+                </div>
+
+                <!-- PREȚ + STOC -->
+                <div class="two-col-grid">
+                    <div>
+                        <label>Preț (lei)</label>
+                        <input type="number" step="0.01" name="price"
+                               placeholder="Ex: 1999.99"
+                               value="{{ product.price if product else '' }}"
+                               required>
+                    </div>
+
+                    <div>
+                        <label>Stoc</label>
+                        <input type="number" name="stock"
+                               placeholder="Ex: 10"
+                               value="{{ product.stock if product else '' }}"
+                               required>
+                    </div>
+                </div>
+
+                <!-- DESCRIERE -->
+                <div>
+                    <label>Descriere</label>
+                    <textarea name="description"
+                              placeholder="Descriere detaliată a produsului...">{{ product.description if product else '' }}</textarea>
+                </div>
+
+                <!-- SPECIFICAȚII -->
+                <div>
+                    <label>Specificații tehnice</label>
+                    <textarea name="specs"
+                              placeholder="Ex: tensiune, dimensiuni, protocol...">{{ product.specs if product else '' }}</textarea>
+                </div>
+
+                <!-- IMAGINE -->
+                <div>
+                    <label>Imagine produs</label>
+                    <input type="file" name="image" accept=".png,.jpg,.jpeg,.webp,.gif">
+
+                    {% if product and product.image %}
+                    <div style="margin-top:10px;">
+                        <img class="preview-image"
+                             src="{{ url_for('static', filename='images/' ~ product.image) }}"
+                             alt="{{ product.name }}">
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- STATUS -->
+                <div class="two-col-grid">
+                    <label class="checkbox">
+                        <input type="checkbox" name="is_active"
+                               {% if not product or product.is_active %}checked{% endif %}>
+                        Produs activ
+                    </label>
+
+                    <label class="checkbox">
+                        <input type="checkbox" name="featured"
+                               {% if product and product.featured %}checked{% endif %}>
+                        Afișat pe pagina principală
+                    </label>
+                </div>
+
+                <!-- BUTOANE -->
+                <div class="product-actions">
+                    <button type="submit" class="btn btn-primary">
+                        💾 Salvează
+                    </button>
+
+                    <a href="{{ url_for('admin_products') }}" class="btn btn-light">
+                        ↩ Înapoi
+                    </a>
+                </div>
+
+            </form>
+
+            <!-- INFO -->
+            <div class="contact-box" style="margin-top: 20px;">
+                <h3>Notă</h3>
+                <p>
+                    Formularul permite gestionarea completă a produselor (CRUD),
+                    inclusiv upload imagine, specificații tehnice și configurare status.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

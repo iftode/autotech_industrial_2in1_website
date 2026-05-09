@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Contul meu | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Cont utilizator</span>
+        <h1>Contul meu</h1>
+        <p>Aici poți vedea datele contului și istoricul comenzilor plasate.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container two-col-grid">
+        <div class="card form-card">
+            <h2>Date utilizator</h2>
+            <p><strong>Nume:</strong> {{ user.full_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Telefon:</strong> {{ user.phone if user.phone else '-' }}</p>
+            <p><strong>Adresă:</strong> {{ user.address if user.address else '-' }}</p>
+            <p><strong>Data creării contului:</strong> {{ user.created_at }}</p>
+        </div>
+
+        <div class="card summary-card">
+            <h2>Acțiuni rapide</h2>
+            <div class="hero-actions">
+                <a href="{{ url_for('products') }}" class="btn btn-primary">Vezi produsele</a>
+                <a href="{{ url_for('view_cart') }}" class="btn btn-light">Vezi coșul</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Istoric comenzi</span>
+                <h2>Comenzile tale</h2>
+            </div>
+        </div>
+
+        <div class="card table-card">
+            {% if orders %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID comandă</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Plată</th>
+                            <th>Total</th>
+                            <th>Email</th>
+                            <th>Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>
+                                <span class="status-badge {% if order.status == 'Nouă' %}status-new{% elif order.status == 'Procesată' %}status-processing{% elif order.status == 'Livrată' %}status-delivered{% elif order.status in ['Retur solicitat', 'Retur acceptat', 'Retur refuzat'] %}status-return{% else %}status-new{% endif %}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
+                            <td>{{ payment_label(order.payment_method) }}</td>
+                            <td>{{ '%.2f'|format(order.total) }} lei</td>
+                            <td>{{ order.customer_email }}</td>
+                            <td>
+                                <div class="table-actions">
+                                    {% if order.status not in ['Retur solicitat', 'Retur acceptat', 'Retur refuzat'] %}
+                                    <form method="post" action="{{ url_for('request_order_return', order_id=order.id) }}" onsubmit="return confirm('Sigur dorești să soliciți retur pentru această comandă?');">
+                                        <input type="hidden" name="reason" value="Retur solicitat din contul clientului">
+                                        <button type="submit" class="btn btn-warning small">Solicită retur</button>
+                                    </form>
+                                    {% else %}
+                                    <span class="muted">{{ order.status }}</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>Nu ai comenzi plasate momentan.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Categorii Admin | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Administrare</span>
+        <h1>Gestionare categorii</h1>
+        <p>
+            În această secțiune poți adăuga, modifica sau șterge categoriile
+            folosite în catalogul magazinului online.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Categorii existente</span>
+                <h2>Listă categorii</h2>
+            </div>
+            <a href="{{ url_for('admin_category_new') }}" class="btn btn-primary">Adaugă categorie</a>
+        </div>
+
+        <div class="card table-card">
+            {% if categories %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nume categorie</th>
+                                <th>Slug</th>
+                                <th>Acțiuni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in categories %}
+                            <tr>
+                                <td>{{ c.id }}</td>
+                                <td>{{ c.name }}</td>
+                                <td>{{ c.slug }}</td>
+                                <td class="table-actions">
+                                    <a href="{{ url_for('admin_category_edit', cat_id=c.id) }}" class="btn btn-light small">Editează</a>
+                                    <form method="post" action="{{ url_for('admin_category_delete', cat_id=c.id) }}">
+                                        <button type="submit" class="btn btn-danger small">Șterge</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-card">
+                    <h3>Nu există categorii</h3>
+                    <p>Adaugă prima categorie pentru a începe organizarea produselor.</p>
+                    <a href="{{ url_for('admin_category_new') }}" class="btn btn-primary">Adaugă categorie</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

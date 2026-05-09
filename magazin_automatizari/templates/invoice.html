@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Factura {{ invoice.invoice_number }} | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="card form-card invoice-card">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">AutoTech Industrial</span>
+                    <h1>FACTURĂ</h1>
+                    <p><strong>Număr:</strong> {{ invoice.invoice_number }}</p>
+                    <p><strong>Data:</strong> {{ invoice.created_at }}</p>
+                </div>
+                <button class="btn btn-primary no-print" onclick="window.print()">Printează / Salvează PDF</button>
+            </div>
+
+            <div class="two-col-grid">
+                <div>
+                    <h2>Furnizor</h2>
+                    <p><strong>AutoTech Industrial</strong></p>
+                    <p>Email: contact@autotech-industrial.ro</p>
+                    <p>Telefon: +40 700 000 000</p>
+                </div>
+                <div>
+                    <h2>Client</h2>
+                    <p><strong>{{ order.customer_name }}</strong></p>
+                    <p>{{ order.customer_email }}</p>
+                    <p>{{ order.phone if order.phone else '-' }}</p>
+                    <p>{{ order.address }}</p>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Produs</th><th>Cantitate</th><th>Preț</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.qty }}</td>
+                            <td>{{ '%.2f'|format(item.unit_price) }} lei</td>
+                            <td>{{ '%.2f'|format(item.line_total) }} lei</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Total factură: {{ '%.2f'|format(invoice.total) }} lei</h2>
+            <p><strong>Metodă de plată:</strong> {{ payment_label(order.payment_method) }}</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

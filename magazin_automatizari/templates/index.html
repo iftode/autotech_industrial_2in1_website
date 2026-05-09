@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %}Acasă | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-single">
+            <span class="eyebrow">Proiect web evaluabil</span>
+            <h1>Platformă web pentru automatizări industriale</h1>
+            <p>
+                AutoTech Industrial este o aplicație web realizată pentru prezentarea produselor
+                din domeniul automatizărilor industriale și pentru simularea fluxului complet
+                de comandă. Proiectul integrează componente de interfață, logică backend,
+                autentificare, administrare și gestionare a datelor.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{{ url_for('products') }}" class="btn btn-primary">Vezi produsele</a>
+                <a href="{{ url_for('contact') }}" class="btn btn-secondary">Solicită ofertă</a>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <strong>{{ stats.products }}</strong>
+                    <span>produse active</span>
+                </div>
+                <div class="stat-card">
+                    <strong>{{ stats.categories }}</strong>
+                    <span>categorii</span>
+                </div>
+                <div class="stat-card">
+                    <strong>{{ stats.orders }}</strong>
+                    <span>comenzi înregistrate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Produse recomandate</span>
+                <h2>Selecție premium pentru automatizări industriale</h2>
+            </div>
+            <a href="{{ url_for('products') }}" class="text-link">Vezi tot catalogul</a>
+        </div>
+
+        <div class="product-grid">
+            {% for p in featured %}
+            <article class="product-card card">
+                <a href="{{ url_for('product_detail', product_id=p.id) }}" class="image-box">
+                    <img src="{{ url_for('static', filename='images/' ~ p.image) }}" alt="{{ p.name }}">
+                </a>
+                <div class="product-body">
+                    <span class="pill">{{ p.category_name }}</span>
+                    <h3><a href="{{ url_for('product_detail', product_id=p.id) }}">{{ p.name }}</a></h3>
+                    <p>{{ p.description }}</p>
+                    <div class="product-meta">
+                        <strong>{{ '%.2f'|format(p.price) }} lei</strong>
+                        <span>Stoc: {{ p.stock }}</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="{{ url_for('product_detail', product_id=p.id) }}" class="btn btn-light">Detalii</a>
+                        <a href="{{ url_for('add_to_cart', product_id=p.id) }}" class="btn btn-primary">Adaugă în coș</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container three-col-grid">
+        <div class="card info-card">
+            <h3>Frontend</h3>
+            <p>
+                Interfața aplicației este realizată cu HTML5, CSS3 și JavaScript, folosind
+                o structură responsive pentru afișare corectă pe desktop, tabletă și telefon.
+            </p>
+        </div>
+
+        <div class="card info-card">
+            <h3>Backend și logică</h3>
+            <p>
+                Funcționalitățile aplicației sunt implementate în Python cu Flask, fiind gestionate
+                autentificarea, sesiunile, comenzile, paginile dinamice și fluxurile aplicației.
+            </p>
+        </div>
+
+        <div class="card info-card">
+            <h3>Bază de date și administrare</h3>
+            <p>
+                Aplicația utilizează o bază de date relațională pentru stocarea produselor,
+                utilizatorilor, comenzilor și categoriilor, împreună cu o zonă dedicată de administrare.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Galerie imagini prelucrate</span>
+                <h2>Exemple de imagini utilizate în proiect</h2>
+            </div>
+        </div>
+
+        <div class="gallery-grid">
+            <article class="card gallery-card">
+                <div class="gallery-image edit-1">
+                    <img src="{{ url_for('static', filename='images/plc.jpg') }}" alt="PLC industrial editat">
+                </div>
+                <div class="gallery-body">
+                    <h3>Imagine 1</h3>
+                    <p>Corecție cromatică și contrast accentuat.</p>
+                </div>
+            </article>
+
+            <article class="card gallery-card">
+                <div class="gallery-image edit-2">
+                    <img src="{{ url_for('static', filename='images/aa.jpg') }}" alt="Echipament industrial editat">
+                </div>
+                <div class="gallery-body">
+                    <h3>Imagine 2</h3>
+                    <p>Ajustare luminozitate și claritate.</p>
+                </div>
+            </article>
+
+            <article class="card gallery-card">
+                <div class="gallery-image edit-3">
+                    <img src="{{ url_for('static', filename='images/cf.jpg') }}" alt="Componentă industrială editată">
+                </div>
+                <div class="gallery-body">
+                    <h3>Imagine 3</h3>
+                    <p>Accent pe tonuri reci și definire a detaliilor.</p>
+                </div>
+            </article>
+
+            <article class="card gallery-card">
+                <div class="gallery-image edit-4">
+                    <img src="{{ url_for('static', filename='images/si.jpg') }}" alt="Senzor industrial editat">
+                </div>
+                <div class="gallery-body">
+                    <h3>Imagine 4</h3>
+                    <p>Optimizare pentru afișare web și contrast.</p>
+                </div>
+            </article>
+
+            <article class="card gallery-card">
+                <div class="gallery-image edit-5">
+                    <img src="{{ url_for('static', filename='images/hmi_edit.jpg') }}" alt="Panou HMI procesat suplimentar">
+                </div>
+                <div class="gallery-body">
+                    <h3>Imagine 5</h3>
+                    <p>Decupare, corecție cromatică, claritate și optimizare pentru mobil.</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section premium-section">
+    <div class="container premium-box card">
+        <div>
+            <span class="eyebrow">Componentă comercială</span>
+            <h2>Flux de comandă și extindere funcțională</h2>
+            <p>
+                Platforma permite valorificarea produselor prin coș de cumpărături, finalizarea
+                comenzilor și extinderea ulterioară cu funcționalități suplimentare pentru clienți
+                business și administrare avansată.
+            </p>
+        </div>
+
+        <div class="premium-actions">
+            <a href="{{ url_for('contact') }}" class="btn btn-primary">Solicită ofertă</a>
+            <a href="{{ url_for('products') }}" class="btn btn-light">Vezi catalogul</a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Noutăți în catalog</span>
+                <h2>Produse disponibile în magazin</h2>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            {% for p in latest %}
+            <article class="product-card card">
+                <a href="{{ url_for('product_detail', product_id=p.id) }}" class="image-box">
+                    <img src="{{ url_for('static', filename='images/' ~ p.image) }}" alt="{{ p.name }}">
+                </a>
+                <div class="product-body">
+                    <span class="pill">{{ p.category_name }}</span>
+                    <h3><a href="{{ url_for('product_detail', product_id=p.id) }}">{{ p.name }}</a></h3>
+                    <p>{{ p.description }}</p>
+                    <div class="product-meta">
+                        <strong>{{ '%.2f'|format(p.price) }} lei</strong>
+                        <span>Stoc: {{ p.stock }}</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="{{ url_for('product_detail', product_id=p.id) }}" class="btn btn-light">Detalii</a>
+                        <a href="{{ url_for('add_to_cart', product_id=p.id) }}" class="btn btn-primary">Adaugă în coș</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

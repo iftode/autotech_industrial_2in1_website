@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Comenzi | Admin{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Panou administrare</span>
+        <h1>Comenzi înregistrate</h1>
+        <p>Vizualizare comenzi, totaluri, metoda de plată și gestionarea retururilor.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="card table-card">
+            {% if orders %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Plată</th>
+                            <th>Total</th>
+                            <th>Data</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.customer_email }}</td>
+                            <td>
+                                <span class="status-badge {% if order.status == 'Nouă' %}status-new{% elif order.status == 'Procesată' %}status-processing{% elif order.status == 'Livrată' %}status-delivered{% elif order.status in ['Retur solicitat', 'Retur acceptat', 'Retur refuzat'] %}status-return{% else %}status-new{% endif %}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
+                            <td>{{ payment_label(order.payment_method) }}</td>
+                            <td>{{ '%.2f'|format(order.total) }} lei</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{{ url_for('admin_order_detail', order_id=order.id) }}" class="btn btn-light small">
+                                        Detalii
+                                    </a>
+
+                                    {% if order.status not in ['Retur solicitat', 'Retur acceptat', 'Retur refuzat'] %}
+                                    <form method="post" action="{{ url_for('admin_mark_order_return', order_id=order.id) }}">
+                                        <button type="submit" class="btn btn-warning small">
+                                            Retur
+                                        </button>
+                                    </form>
+                                    {% endif %}
+
+                                    <form method="post" action="{{ url_for('admin_delete_order', order_id=order.id) }}" onsubmit="return confirm('Sigur vrei să ștergi această comandă?');">
+                                        <button type="submit" class="btn btn-danger small">
+                                            Șterge
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>Nu există comenzi înregistrate.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

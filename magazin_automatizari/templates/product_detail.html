@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Detalii produs</span>
+        <h1>{{ product.name }}</h1>
+        <p>
+            Pagina de detaliu oferă informații descriptive, preț, categorie, stoc și opțiunea de cumpărare directă.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container detail-layout">
+        <div class="card detail-image">
+            <img src="{{ url_for('static', filename='images/' ~ product.image) }}" alt="{{ product.name }}">
+        </div>
+
+        <div class="card detail-content">
+            {% if product.category_name %}
+            <span class="pill">{{ product.category_name }}</span>
+            {% endif %}
+
+            <h2>{{ product.name }}</h2>
+            <p class="lead">{{ product.description }}</p>
+
+            <div class="detail-meta">
+                <div>
+                    <strong>Preț</strong>
+                    <div class="price-box">{{ '%.2f'|format(product.price) }} lei</div>
+                </div>
+
+                <div>
+                    <strong>Stoc disponibil</strong>
+                    <p>{{ product.stock }} bucăți</p>
+                </div>
+            </div>
+
+            {% if product.sku or product.specs %}
+            <div class="spec-box">
+                <h3>Specificații</h3>
+                {% if product.sku %}
+                <p><strong>SKU:</strong> {{ product.sku }}</p>
+                {% endif %}
+                {% if product.specs %}
+                <p>{{ product.specs }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="product-actions">
+                <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-primary">Adaugă în coș</a>
+                <a href="{{ url_for('products') }}" class="btn btn-light">Înapoi la produse</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if related %}
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Produse similare</span>
+                <h2>Alte produse recomandate</h2>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            {% for p in related %}
+            <article class="product-card card">
+                <a href="{{ url_for('product_detail', product_id=p.id) }}" class="image-box">
+                    <img src="{{ url_for('static', filename='images/' ~ p.image) }}" alt="{{ p.name }}">
+                </a>
+                <div class="product-body">
+                    <h3><a href="{{ url_for('product_detail', product_id=p.id) }}">{{ p.name }}</a></h3>
+                    <div class="product-meta">
+                        <strong>{{ '%.2f'|format(p.price) }} lei</strong>
+                    </div>
+                    <div class="product-actions">
+                        <a href="{{ url_for('product_detail', product_id=p.id) }}" class="btn btn-light">Detalii</a>
+                        <a href="{{ url_for('add_to_cart', product_id=p.id) }}" class="btn btn-primary">Adaugă în coș</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

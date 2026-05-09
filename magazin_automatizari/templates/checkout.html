@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}Checkout | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Checkout</span>
+        <h1>Finalizare comandă</h1>
+        <p>
+            Completează datele necesare pentru plasarea comenzii.
+            Dacă ești autentificat, datele din cont vor fi completate automat,
+            dar le poți modifica pentru o altă livrare.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container cart-grid">
+        <div class="card form-card">
+            <h2>Date client</h2>
+
+            {% if user %}
+            <div class="contact-box">
+                <p>
+                    Ești autentificat ca <strong>{{ user.full_name }}</strong>.
+                    Datele din cont au fost completate automat și pot fi modificate pentru această comandă.
+                </p>
+            </div>
+            {% endif %}
+
+            <form method="post" class="main-form">
+                <div>
+                    <label for="customer_name">Nume complet</label>
+                    <input type="text"
+                           id="customer_name"
+                           name="customer_name"
+                           required
+                           placeholder="Introdu numele complet"
+                           value="{{ user.full_name if user else '' }}">
+                </div>
+
+                <div>
+                    <label for="customer_email">Email</label>
+                    <input type="email"
+                           id="customer_email"
+                           name="customer_email"
+                           required
+                           placeholder="Introdu adresa de email"
+                           value="{{ user.email if user else '' }}">
+                </div>
+
+                <div>
+                    <label for="phone">Telefon</label>
+                    <input type="text"
+                           id="phone"
+                           name="phone"
+                           placeholder="Introdu numărul de telefon"
+                           value="{{ user.phone if user and user.phone else '' }}">
+                </div>
+
+                <div>
+                    <label for="address">Adresă livrare</label>
+                    <textarea id="address"
+                              name="address"
+                              required
+                              placeholder="Introdu adresa completă">{{ user.address if user and user.address else '' }}</textarea>
+                </div>
+
+                <div>
+                    <label for="payment_method">Metodă de plată</label>
+                    <select id="payment_method" name="payment_method" required data-payment-method>
+                        {% for key, label in payment_methods.items() %}
+                        <option value="{{ key }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="card-payment-box" data-card-fields style="display: none;">
+                    <h3>Date card fictive</h3>
+
+                    <div>
+                        <label for="card_holder">Nume titular card</label>
+                        <input type="text" id="card_holder" name="card_holder" placeholder="Ex: Popescu Ion">
+                    </div>
+
+                    <div>
+                        <label for="card_number">Număr card</label>
+                        <input type="text" id="card_number" name="card_number" placeholder="Ex: 4111 1111 1111 1111" maxlength="23">
+                    </div>
+
+                    <div class="two-mini-grid">
+                        <div>
+                            <label for="card_expiry">Expirare</label>
+                            <input type="text" id="card_expiry" name="card_expiry" placeholder="MM/YY" maxlength="5">
+                        </div>
+
+                        <div>
+                            <label for="card_cvv">CVV</label>
+                            <input type="password" id="card_cvv" name="card_cvv" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+
+                    <div class="contact-box">
+                        <p><strong>Notă:</strong> Datele cardului sunt folosite doar pentru simularea plății în cadrul proiectului de licență.</p>
+                    </div>
+                </div>
+
+                <div class="contact-box">
+                    <h3>Metode disponibile</h3>
+                    <p><strong>Plată ramburs</strong> - plata se face la livrare.</p>
+                    <p><strong>Card online</strong> - metodă simulată pentru proiect.</p>
+                    <p><strong>Transfer bancar</strong> - plata se face prin ordin de plată.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary full">Plasează comanda</button>
+            </form>
+        </div>
+
+        <aside class="card summary-card">
+            <h2>Rezumat final</h2>
+
+            {% if items %}
+            <ul class="checkout-list">
+                {% for item in items %}
+                <li>
+                    <span>{{ item.product.name }} x {{ item.qty }}</span>
+                    <strong>{{ '%.2f'|format(item.line_total) }} lei</strong>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <p class="summary-total">Total: {{ '%.2f'|format(total) }} lei</p>
+            {% else %}
+            <p>Nu există produse în coș.</p>
+            {% endif %}
+
+            <div class="contact-box">
+                <h3>Notă proiect</h3>
+                <p>
+                    Datele din contul utilizatorului sunt preluate automat în checkout,
+                    dar pot fi modificate pentru fiecare comandă în parte.
+                </p>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Contact | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="contact-hero-section">
+    <div class="container">
+        <div class="contact-hero card">
+            <div>
+                <span class="eyebrow">Contact AutoTech</span>
+                <h1>Ai o întrebare? Trimite-ne o solicitare</h1>
+                <p>
+                    Pentru produse, comenzi, livrare, retururi, oferte B2B sau consultanță tehnică,
+                    echipa AutoTech Industrial îți oferă asistență rapidă.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="https://wa.me/40726031449" target="_blank">Scrie-ne pe WhatsApp</a>
+                    <a class="btn btn-secondary" href="mailto:contact@autotech-industrial.ro">Trimite email</a>
+                </div>
+            </div>
+
+            <div class="contact-hero-box">
+                <div class="contact-hero-icon">⚙️</div>
+                <h3>Consultant AutoTech</h3>
+                <p>Te ajutăm cu alegerea produselor, statusul comenzilor și soluții pentru automatizări industriale.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section contact-modern-section">
+    <div class="container contact-cards-grid">
+        <div class="card contact-info-card">
+            <span class="contact-card-icon">📞</span>
+            <h3>Telefon / WhatsApp</h3>
+            <p>+40 726 031 449</p>
+        </div>
+
+        <div class="card contact-info-card">
+            <span class="contact-card-icon">✉️</span>
+            <h3>Email</h3>
+            <p>contact@autotech-industrial.ro</p>
+        </div>
+
+        <div class="card contact-info-card">
+            <span class="contact-card-icon">🚚</span>
+            <h3>Livrare</h3>
+            <p>Transport gratuit la comenzi peste 1001 lei.</p>
+        </div>
+
+        <div class="card contact-info-card">
+            <span class="contact-card-icon">🕘</span>
+            <h3>Program</h3>
+            <p>Luni - Vineri, 09:00 - 18:00</p>
+        </div>
+    </div>
+</section>
+
+<section class="section contact-form-section">
+    <div class="container two-col-grid">
+        <div class="card form-card">
+            <h2>Formular de contact</h2>
+            <p>Completează formularul pentru solicitări detaliate sau oferte personalizate.</p>
+
+            <form method="post" class="main-form">
+                <div>
+                    <label for="full_name">Nume complet</label>
+                    <input type="text" id="full_name" name="full_name" placeholder="Introdu numele tău" required>
+                </div>
+
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="exemplu@email.com" required>
+                </div>
+
+                <div>
+                    <label for="company">Companie</label>
+                    <input type="text" id="company" name="company" placeholder="Numele companiei, opțional">
+                </div>
+
+                <div>
+                    <label for="message">Mesaj</label>
+                    <textarea id="message" name="message" placeholder="Scrie aici solicitarea ta..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary full">Trimite mesajul</button>
+            </form>
+        </div>
+
+        <div class="card info-card contact-services-card">
+            <h2>Servicii oferite</h2>
+            <ul class="feature-list compact">
+                <li>consultanță pentru alegerea produselor industriale;</li>
+                <li>solicitări de ofertă B2B;</li>
+                <li>asistență pentru comenzi, AWB și facturi;</li>
+                <li>informații despre retururi și garanție;</li>
+                <li>recomandări AI pentru produse și soluții tehnice.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

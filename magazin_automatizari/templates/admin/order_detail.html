@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}Gestionare comandă #{{ order.id }} | Admin{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Admin comandă</span>
+        <h1>Gestionare comandă #{{ order.id }}</h1>
+        <p>Gestionează statusul, AWB-ul, factura și returul comenzii.</p>
+        <div class="hero-actions">
+            <a href="{{ url_for('admin_orders') }}" class="btn btn-light">Înapoi la comenzi</a>
+            <form method="post" action="{{ url_for('admin_delete_order', order_id=order.id) }}" onsubmit="return confirm('Sigur vrei să ștergi această comandă?');">
+                <button class="btn btn-danger" type="submit">Șterge comanda</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container two-col-grid">
+        <div class="card form-card">
+            <h2>Date client</h2>
+            <p><strong>Nume:</strong> {{ order.customer_name }}</p>
+            <p><strong>Email:</strong> {{ order.customer_email }}</p>
+            <p><strong>Telefon:</strong> {{ order.phone if order.phone else '-' }}</p>
+            <p><strong>Adresă:</strong> {{ order.address }}</p>
+            <p><strong>Plată:</strong> {{ payment_label(order.payment_method) }}</p>
+            <p><strong>Total:</strong> {{ '%.2f'|format(order.total) }} lei</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+            <p><strong>Data:</strong> {{ order.created_at }}</p>
+        </div>
+
+        <div class="card form-card">
+            <h2>Actualizare status</h2>
+            <form method="post" action="{{ url_for('admin_update_order_status', order_id=order.id) }}" class="form-grid single">
+                <label>Status comandă</label>
+                <select name="status">
+                    {% for status in ['Nouă', 'Confirmată', 'În pregătire', 'Expediată', 'Livrată', 'Anulată', 'Retur solicitat', 'Retur acceptat', 'Retur refuzat'] %}
+                    <option value="{{ status }}" {% if order.status == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-primary" type="submit">Salvează status</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="card table-card">
+            <h2>Produse comandate</h2>
+            {% if items %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produs</th>
+                            <th>Cantitate</th>
+                            <th>Preț</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.qty }}</td>
+                            <td>{{ '%.2f'|format(item.unit_price) }} lei</td>
+                            <td>{{ '%.2f'|format(item.line_total) }} lei</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>Nu există produse asociate comenzii.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container two-col-grid">
+        <div class="card form-card">
+            <h2>AWB / Expediere</h2>
+            {% if shipment %}
+            <div class="notice success">
+                <p><strong>Curier:</strong> {{ shipment.courier }}</p>
+                <p><strong>AWB:</strong> {{ shipment.awb }}</p>
+                <p><strong>Status:</strong> {{ shipment.status }}</p>
+                <p><strong>Data:</strong> {{ shipment.created_at }}</p>
+            </div>
+            <a class="btn btn-primary" href="{{ shipment.tracking_url }}" target="_blank">Deschide tracking</a>
+            {% else %}
+            <div class="notice">Nu există AWB creat pentru această comandă.</div>
+            <form method="post" action="{{ url_for('admin_generate_awb', order_id=order.id) }}" class="form-grid single">
+                <label>Alege curier</label>
+                <select name="courier">
+                    <option value="fan">Fan Courier</option>
+                    <option value="sameday">Sameday</option>
+                </select>
+                <small>Integrare API simulată: AWB-ul și linkul de tracking se generează automat.</small>
+                <button class="btn btn-primary" type="submit">Generează AWB automat</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="card form-card">
+            <h2>Factură</h2>
+            {% if invoice %}
+            <div class="notice success">
+                <p><strong>Factura există</strong></p>
+                <p><strong>Număr:</strong> {{ invoice.invoice_number }}</p>
+                <p><strong>Total:</strong> {{ '%.2f'|format(invoice.total) }} lei</p>
+                <p><strong>Creată de:</strong> {{ invoice.created_by }}</p>
+                <p><strong>Data:</strong> {{ invoice.created_at }}</p>
+            </div>
+            <a class="btn btn-primary" href="{{ url_for('invoice_view', order_id=order.id) }}" target="_blank">Vezi factura</a>
+            {% else %}
+            <div class="notice">Nu există factură pentru această comandă.</div>
+            <form method="post" action="{{ url_for('admin_generate_invoice', order_id=order.id) }}">
+                <button class="btn btn-primary" type="submit">Generează factură</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="card form-card">
+            <h2>Retur</h2>
+            {% if return_request %}
+            <div class="notice">
+                <p><strong>Status retur:</strong> {{ return_request.status }}</p>
+                <p><strong>Motiv:</strong> {{ return_request.reason if return_request.reason else '-' }}</p>
+                <p><strong>Data:</strong> {{ return_request.created_at }}</p>
+                {% if return_request.admin_note %}<p><strong>Notă admin:</strong> {{ return_request.admin_note }}</p>{% endif %}
+            </div>
+            <form method="post" action="{{ url_for('admin_update_return_status', order_id=order.id) }}" class="form-grid single">
+                <label>Status retur</label>
+                <select name="return_status">
+                    {% for status in ['Cerere trimisă', 'În analiză', 'Retur acceptat', 'Retur refuzat', 'Rambursare efectuată'] %}
+                    <option value="{{ status }}" {% if return_request.status == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+                <label>Notă admin</label>
+                <textarea name="admin_note" rows="3" placeholder="Ex: Retur aprobat după verificarea produsului.">{{ return_request.admin_note or '' }}</textarea>
+                <button class="btn btn-primary" type="submit">Actualizează retur</button>
+            </form>
+            {% else %}
+            <div class="notice">Clientul nu a solicitat retur pentru această comandă.</div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

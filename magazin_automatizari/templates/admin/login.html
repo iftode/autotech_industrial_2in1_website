@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Login Admin | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container narrow">
+        <span class="eyebrow">Panou administrare</span>
+        <h1>Autentificare administrator</h1>
+        <p>Introdu datele de acces pentru a intra în panoul de administrare.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container narrow">
+        <div class="card form-card">
+            <h2>Login Admin</h2>
+
+            <form method="post" class="main-form">
+                <div>
+                    <label for="username">Utilizator</label>
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           required
+                           placeholder="Introdu utilizatorul admin">
+                </div>
+
+                <div>
+                    <label for="password">Parolă</label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           required
+                           placeholder="Introdu parola">
+                </div>
+
+                <button type="submit" class="btn btn-primary full">Autentificare</button>
+            </form>
+
+            <div class="contact-box">
+                <p><strong>Date demo:</strong> utilizator <code>admin</code>, parolă <code>admin123</code></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

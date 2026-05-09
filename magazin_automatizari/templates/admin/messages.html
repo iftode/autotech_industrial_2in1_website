@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Mesaje Admin | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Administrare</span>
+        <h1>Mesaje primite</h1>
+        <p>
+            Aici sunt afișate mesajele trimise de utilizatori prin formularul de contact.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Formular contact</span>
+                <h2>Listă mesaje</h2>
+            </div>
+        </div>
+
+        <div class="card table-card">
+
+            {% if messages %}
+            <div style="padding: 16px; border-bottom: 1px solid var(--line);">
+                <strong>Total mesaje:</strong> {{ messages|length }}
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nume</th>
+                            <th>Email</th>
+                            <th>Companie</th>
+                            <th>Mesaj</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in messages %}
+                        <tr>
+                            <td><strong>#{{ m.id }}</strong></td>
+
+                            <td>
+                                <strong>{{ m.full_name }}</strong>
+                            </td>
+
+                            <td>{{ m.email }}</td>
+
+                            <td>
+                                {% if m.company %}
+                                {{ m.company }}
+                                {% else %}
+                                <span class="muted">-</span>
+                                {% endif %}
+                            </td>
+
+                            <td style="max-width: 250px;">
+                                {{ m.message[:80] }}{% if m.message|length > 80 %}...{% endif %}
+                            </td>
+
+                            <td>{{ m.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            <div class="empty-card">
+                <h3>Nu există mesaje</h3>
+                <p>Mesajele trimise din formularul de contact vor apărea aici.</p>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</section>
+{% endblock %}

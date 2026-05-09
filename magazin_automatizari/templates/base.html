@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AutoTech Industrial{% endblock %}</title>
+    <meta name="description" content="Magazin online mobile-first pentru produse de automatizare industrială. Proiect web cu monetizare, imagini prelucrate și structură responsive.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-wrap">
+            <a class="logo" href="{{ url_for('index') }}">
+                <span class="logo-mark">⚙</span>
+                <span>
+                    <strong>AutoTech Industrial</strong>
+                    <small>magazin online pentru automatizări</small>
+                </span>
+            </a>
+
+            <button class="nav-toggle" type="button" aria-label="Deschide meniul" data-nav-toggle>☰</button>
+
+            <nav class="site-nav" data-nav>
+                <a href="{{ url_for('index') }}">Acasă</a>
+                <a href="{{ url_for('products') }}">Produse</a>
+                <a href="{{ url_for('about') }}">Despre proiect</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+                <a href="{{ url_for('view_cart') }}" class="cart-link">Coș <span>{{ cart_count }}</span></a>
+
+                {% if logged_user %}
+                <a href="{{ url_for('account') }}" class="admin-link">Contul meu</a>
+                <a href="{{ url_for('logout') }}" class="admin-link">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="admin-link">Login</a>
+                <a href="{{ url_for('register') }}" class="admin-link">Înregistrare</a>
+                {% endif %}
+
+                <a href="{{ url_for('admin_dashboard') }}" class="admin-link">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="container flashes">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <div class="chatbot">
+        <button class="chatbot-toggle" type="button" data-chat-toggle aria-label="Deschide chatul">
+            💬
+        </button>
+
+        <div class="chatbot-panel" data-chat-panel>
+            <div class="chatbot-header">
+                <div>
+                    <strong>Asistent AutoTech</strong>
+                    <small>Suport rapid pentru comenzi și produse</small>
+                </div>
+                <button type="button" class="chatbot-close" data-chat-close aria-label="Închide chatul">×</button>
+            </div>
+
+            <div class="chatbot-body" data-chat-messages>
+                <div class="chat-msg bot">
+                    Salut! Te pot ajuta cu:
+                    <br>
+                    - status comandă
+                    <br>
+                    - livrare
+                    <br>
+                    - retur
+                    <br>
+                    - contact
+                    <br>
+                    - produse disponibile
+                    <br><br>
+                    Exemplu: <strong>Status comandă 1, email client@exemplu.com</strong>
+                </div>
+            </div>
+
+            <form class="chatbot-form" data-chat-form>
+                <input type="text"
+                       name="message"
+                       data-chat-input
+                       placeholder="Scrie mesajul tău aici..."
+                       autocomplete="off"
+                       required>
+                <button type="submit" class="btn btn-primary">Trimite</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h3>AutoTech Industrial</h3>
+                <p>
+                    Proiect web de tip magazin online, realizat în stil <strong>mobile-first</strong>,
+                    pentru prezentarea și comercializarea produselor de automatizare industrială.
+                </p>
+            </div>
+
+            <div>
+                <h4>Pagini principale</h4>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Acasă</a></li>
+                    <li><a href="{{ url_for('products') }}">Produse</a></li>
+                    <li><a href="{{ url_for('about') }}">Despre proiect</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    <li><a href="{{ url_for('view_cart') }}">Coș</a></li>
+                    <li><a href="{{ url_for('checkout') }}">Checkout</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Monetizare</h4>
+                <p>
+                    Site-ul utilizează monetizare de tip <strong>one-time payment</strong>
+                    prin comandă directă în coș și checkout.
+                </p>
+                <p>
+                    În plus, interfața include și o secțiune demonstrativă de tip
+                    <strong>subscription / abonament premium</strong>.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

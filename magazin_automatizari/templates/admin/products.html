@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Produse Admin | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Administrare</span>
+        <h1>Gestionare produse</h1>
+        <p>
+            În această secțiune poți vizualiza, adăuga, edita sau șterge
+            produsele din magazinul online.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Catalog administrativ</span>
+                <h2>Listă produse</h2>
+            </div>
+            <a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">
+                ➕ Adaugă produs
+            </a>
+        </div>
+
+        <div class="card table-card">
+            {% if products %}
+            <div style="padding: 16px; border-bottom: 1px solid var(--line);">
+                <strong>Total produse:</strong> {{ products|length }}
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagine</th>
+                            <th>Nume</th>
+                            <th>Categorie</th>
+                            <th>Preț</th>
+                            <th>Stoc</th>
+                            <th>Status</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                        <tr>
+                            <td><strong>#{{ p.id }}</strong></td>
+
+                            <td>
+                                {% if p.image %}
+                                <img class="thumb" src="{{ url_for('static', filename='images/' ~ p.image) }}" alt="{{ p.name }}">
+                                {% else %}
+                                <span class="muted">Fără imagine</span>
+                                {% endif %}
+                            </td>
+
+                            <td><strong>{{ p.name }}</strong></td>
+
+                            <td>
+                                <span class="pill">{{ p.category_name }}</span>
+                            </td>
+
+                            <td><strong>{{ '%.2f'|format(p.price) }} lei</strong></td>
+
+                            <td>{{ p.stock }}</td>
+
+                            <td>
+                                {% if p.is_active %}
+                                <span class="pill">Activ</span>
+                                {% else %}
+                                <span class="pill" style="background:#fee2e2;color:#b91c1c;">Inactiv</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="table-actions">
+                                <a href="{{ url_for('admin_product_edit', product_id=p.id) }}" class="btn btn-light small">
+                                    ✏️ Edit
+                                </a>
+
+                                <form method="post"
+                                      action="{{ url_for('admin_product_delete', product_id=p.id) }}"
+                                      onsubmit="return confirm('Sigur vrei să ștergi acest produs?');">
+                                    <button type="submit" class="btn btn-danger small">
+                                        🗑 Șterge
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-card">
+                <h3>Nu există produse</h3>
+                <p>Adaugă primul produs pentru a începe construirea catalogului.</p>
+                <a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">
+                    ➕ Adaugă produs
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

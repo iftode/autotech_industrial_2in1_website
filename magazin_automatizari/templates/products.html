@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}Produse | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Catalog produse</span>
+        <h1>Produse pentru automatizări industriale</h1>
+        <p>
+            Explorează catalogul de produse tehnice disponibile în magazin:
+            PLC-uri, senzori, HMI-uri, componente electrice și accesorii industriale.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container catalog-layout">
+
+        <aside class="card sidebar-card">
+            <h2>Filtrare produse</h2>
+
+            <form method="get" class="filter-form">
+                <div>
+                    <label for="q">Căutare</label>
+                    <input type="text"
+                           id="q"
+                           name="q"
+                           value="{{ search }}"
+                           placeholder="Ex: PLC Siemens">
+                </div>
+
+                <div>
+    <label for="categorie">Categorie</label>
+    <select id="categorie" name="categorie">
+        <option value="">Toate categoriile</option>
+        {% for c in categories %}
+        <option value="{{ c.slug }}" {% if current_category == c.slug %}selected{% endif %}>
+            {{ c.name }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+
+                <button type="submit" class="btn btn-primary full">
+                    Aplică filtrele
+                </button>
+            </form>
+
+            <div class="contact-box">
+                <h3>Monetizare</h3>
+                <p>
+                    Produsele pot fi cumpărate direct prin modelul
+                    <strong>one-time payment</strong>.
+                </p>
+                <p>
+                    Pentru clienții business există și opțiunea unui
+                    <strong>abonament premium</strong>.
+                </p>
+            </div>
+        </aside>
+
+        <div>
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Rezultate</span>
+                    <h2>Catalog disponibil</h2>
+                </div>
+            </div>
+
+            {% if products %}
+            <div class="product-grid">
+                {% for p in products %}
+                <article class="product-card card">
+                    <a href="{{ url_for('product_detail', product_id=p.id) }}" class="image-box">
+                        <img src="{{ url_for('static', filename='images/' ~ p.image) }}" alt="{{ p.name }}">
+                    </a>
+
+                    <div class="product-body">
+                        {% if p.category_name %}
+                        <span class="pill">{{ p.category_name }}</span>
+                        {% endif %}
+
+                        <h3>
+                            <a href="{{ url_for('product_detail', product_id=p.id) }}">
+                                {{ p.name }}
+                            </a>
+                        </h3>
+
+                        <p>{{ p.description }}</p>
+
+                        <div class="product-meta">
+                            <strong>{{ '%.2f'|format(p.price) }} lei</strong>
+                            <span>Stoc: {{ p.stock }}</span>
+                        </div>
+
+                        <div class="product-actions">
+                            <a href="{{ url_for('product_detail', product_id=p.id) }}" class="btn btn-light">
+                                Detalii
+                            </a>
+
+                            <a href="{{ url_for('add_to_cart', product_id=p.id) }}" class="btn btn-primary">
+                                Adaugă în coș
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="card empty-card">
+                <h3>Nu au fost găsite produse</h3>
+                <p>
+                    Modifică filtrele sau revino la catalogul complet pentru a vedea toate produsele disponibile.
+                </p>
+                <a href="{{ url_for('products') }}" class="btn btn-primary">
+                    Resetează filtrele
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% endblock %}

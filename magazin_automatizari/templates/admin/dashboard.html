@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Admin | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="page-hero slim">
+    <div class="container">
+        <span class="eyebrow">Panou administrare</span>
+        <h1>Dashboard</h1>
+        <p>
+            Gestionează produsele, categoriile, comenzile și mesajele din platforma magazinului online.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <!-- STATS -->
+        <div class="stats-row admin-stats">
+            <div class="stat-card">
+                <strong>{{ stats.products }}</strong>
+                <span>Produse</span>
+            </div>
+
+            <div class="stat-card">
+                <strong>{{ stats.categories }}</strong>
+                <span>Categorii</span>
+            </div>
+
+            <div class="stat-card">
+                <strong>{{ stats.orders }}</strong>
+                <span>Comenzi</span>
+            </div>
+
+            <div class="stat-card">
+                <strong>{{ stats.messages }}</strong>
+                <span>Mesaje</span>
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="section-head" style="margin-top: 30px;">
+            <div>
+                <span class="eyebrow">Administrare rapidă</span>
+                <h2>Acțiuni principale</h2>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+            <a href="{{ url_for('admin_products') }}" class="btn btn-primary">📦 Produse</a>
+            <a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">➕ Adaugă produs</a>
+            <a href="{{ url_for('admin_categories') }}" class="btn btn-light">📁 Categorii</a>
+            <a href="{{ url_for('admin_orders') }}" class="btn btn-light">🧾 Comenzi</a>
+            <a href="{{ url_for('admin_messages') }}" class="btn btn-light">✉️ Mesaje</a>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">🔓 Logout</a>
+        </div>
+
+        <!-- RECENT ORDERS -->
+        <div class="card table-card" style="margin-top: 30px;">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Activitate recentă</span>
+                    <h2>Ultimele comenzi</h2>
+                </div>
+            </div>
+
+            {% if recent_orders %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Email</th>
+                            <th>Total</th>
+                            <th>Data</th>
+                            <th>Detalii</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td><strong>#{{ order.id }}</strong></td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.customer_email }}</td>
+                            <td><strong>{{ '%.2f'|format(order.total) }} lei</strong></td>
+                            <td>{{ order.created_at }}</td>
+                            <td>
+                                <a href="{{ url_for('admin_order_detail', order_id=order.id) }}"
+                                   class="btn btn-light small">
+                                    Vezi
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-card">
+                <h3>Nu există comenzi</h3>
+                <p>Comenzile vor apărea aici după prima achiziție din site.</p>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% endblock %}

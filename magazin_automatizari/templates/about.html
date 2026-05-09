@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}Despre proiect | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-single">
+            <span class="eyebrow">Despre proiect</span>
+            <h1>Structura tehnică a aplicației</h1>
+            <p>
+                AutoTech Industrial este o aplicație web dezvoltată pentru prezentarea produselor
+                de automatizare industrială și pentru simularea procesului de comandă online.
+                Proiectul evidențiază arhitectura tehnică a unei platforme web, prin integrarea
+                interfeței utilizator, a logicii backend și a bazei de date.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Arhitectură</span>
+                <h2>Componentele principale ale sistemului</h2>
+            </div>
+        </div>
+
+        <div class="three-col-grid">
+            <div class="card info-card">
+                <h3>Interfața utilizator</h3>
+                <p>
+                    Interfața aplicației este realizată cu HTML5, CSS3 și JavaScript, fiind organizată
+                    pe pagini dedicate pentru produse, autentificare, coș de cumpărături, checkout
+                    și contact.
+                </p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Backend</h3>
+                <p>
+                    Logica aplicației este implementată în Python folosind framework-ul Flask.
+                    Backend-ul gestionează rutele, autentificarea utilizatorilor, sesiunile,
+                    comenzile și legătura dintre interfață și datele stocate.
+                </p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Baza de date</h3>
+                <p>
+                    Aplicația utilizează o bază de date relațională pentru stocarea informațiilor
+                    despre produse, categorii, utilizatori, comenzi și mesaje transmise prin formular.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Tehnologii utilizate</span>
+                <h2>Tehnologii și instrumente de dezvoltare</h2>
+            </div>
+        </div>
+
+        <div class="three-col-grid">
+            <div class="card info-card">
+                <h3>Frontend</h3>
+                <p>
+                    HTML5 este utilizat pentru structura paginilor, CSS3 pentru stilizare și
+                    responsive design, iar JavaScript pentru interacțiunile dinamice din interfață.
+                </p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Backend și procesare</h3>
+                <p>
+                    Flask gestionează logica server-side, procesarea cererilor HTTP, afișarea
+                    paginilor dinamice și funcționalitățile asociate conturilor și comenzilor.
+                </p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Persistența datelor</h3>
+                <p>
+                    SQLite este utilizată pentru persistența datelor aplicației, oferind o soluție
+                    simplă și eficientă pentru implementarea proiectului.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Funcționalități</span>
+                <h2>Funcționalități implementate</h2>
+            </div>
+        </div>
+
+        <div class="three-col-grid">
+            <div class="card info-card">
+                <h3>Gestionarea produselor</h3>
+                <p>
+                    Utilizatorii pot vizualiza catalogul de produse, accesa paginile de detalii
+                    și analiza informațiile relevante pentru fiecare articol disponibil.
+                </p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Cont utilizator și comandă</h3>
+                <p>
+                    Platforma permite înregistrarea și autentificarea utilizatorilor, adăugarea
+                    produselor în coș și simularea procesului de finalizare a comenzii.
+                </p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Administrare</h3>
+                <p>
+                    Zona de administrare permite gestionarea produselor, categoriilor, comenzilor
+                    și mesajelor, separând funcționalitățile administratorului de cele ale clientului.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

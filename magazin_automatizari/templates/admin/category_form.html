@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Adaugă' if mode == 'new' else 'Editează' }} categorie{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container narrow">
+        <div class="card form-card">
+            <h1>{{ 'Adaugă' if mode == 'new' else 'Editează' }} categorie</h1>
+            <form method="post" class="main-form">
+                <input type="text" name="name" placeholder="Nume categorie" value="{{ category.name if category else '' }}" required>
+                <input type="text" name="slug" placeholder="slug-categorie" value="{{ category.slug if category else '' }}" required>
+                <button type="submit" class="btn btn-primary">Salvează</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

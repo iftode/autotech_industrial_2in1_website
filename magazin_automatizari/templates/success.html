@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Comandă plasată | AutoTech Industrial{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container narrow">
+        <div class="card success-card">
+            <div class="success-icon">✅</div>
+            <h1>Comanda a fost plasată cu succes</h1>
+            <p>Îți mulțumim pentru comandă. Datele au fost înregistrate în sistem.</p>
+
+            <p class="order-ref">Număr comandă: <strong>#{{ order.id }}</strong></p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+            <p><strong>Metodă de plată:</strong> {{ payment_label(order.payment_method) }}</p>
+            <p><strong>Total:</strong> {{ '%.2f'|format(order.total) }} lei</p>
+
+            {% if order.payment_method == 'card' %}
+            <div class="contact-box" style="text-align:left; margin-top: 20px;">
+                <h3>Detalii simulare card</h3>
+                <p><strong>Titular:</strong> {{ order.card_holder if order.card_holder else '-' }}</p>
+                <p><strong>Card:</strong> **** **** **** {{ order.card_last4 if order.card_last4 else '----' }}</p>
+                <p>Plata cu cardul a fost simulată cu succes în cadrul proiectului.</p>
+            </div>
+            {% endif %}
+
+            <div class="hero-actions" style="justify-content:center; margin-top: 20px;">
+                <a href="{{ url_for('products') }}" class="btn btn-primary">Continuă cumpărăturile</a>
+                {% if logged_user %}
+                <a href="{{ url_for('account') }}" class="btn btn-light">Vezi contul meu</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
